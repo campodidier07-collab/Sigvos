@@ -1,0 +1,12 @@
+# Entornos y secretos
+.env
+
+# Archivos de usuario subidos al sistema
+public/storage/fotos/*
+public/storage/perfiles/*
+!public/storage/fotos/.gitkeep
+!public/storage/perfiles/.gitkeep
+
+# Caché y logs
+*.log
+.DS_Store

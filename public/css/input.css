@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { 
+  --green-main: #3aa574; 
+}
+
+html { 
+  font-size: 18px; 
+}
+
+body { 
+  background-color: #f2fbf5; 
+  color: #1d4533; 
+  font-size: 1rem; 
+}
+
+@layer components {
+  .btn-agro { 
+    @apply bg-agro-500 text-white transition-all duration-300;
+    box-shadow: 0 4px 14px rgba(58,165,116,0.3); 
+  }
+  .btn-agro:hover { 
+    @apply bg-agro-600 -translate-y-px;
+    box-shadow: 0 6px 20px rgba(58,165,116,0.4); 
+  }
+
+  .glass-card { 
+    @apply bg-white/95 backdrop-blur-md border border-agro-500/15;
+    box-shadow: 0 8px 30px rgba(29,69,51,0.04); 
+  }
+
+  .hero-panel { 
+    @apply rounded-3xl p-7 text-white relative overflow-hidden;
+    background: linear-gradient(135deg, #1d4533 0%, #2b845a 100%);
+    box-shadow: 0 15px 35px rgba(43,132,90,0.2); 
+  }
+
+  .status-pill { 
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold; 
+  }
+  .status-ok { @apply bg-agro-100 text-agro-700; } 
+  .status-mid { @apply bg-blue-50 text-blue-600; } 
+  .status-warn { @apply bg-amber-50 text-amber-700; }
+}

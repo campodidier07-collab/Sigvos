@@ -1,0 +1,27 @@
+# SIGVOS — Protección de la carpeta uploads
+# Previene la ejecución de scripts PHP subidos por usuarios
+
+# Bloquear la ejecución de PHP en esta carpeta
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+
+# Permitir solo imágenes (jpg, jpeg, png, webp, gif)
+<FilesMatch "\.(jpg|jpeg|png|webp|gif)$">
+    Require all granted
+</FilesMatch>
+
+# Bloquear todo lo demás
+<FilesMatch "^.*$">
+    <If "! %{REQUEST_URI} =~ /\.(jpg|jpeg|png|webp|gif)$/i">
+        Require all denied
+    </If>
+</FilesMatch>
+
+# Deshabilitar la ejecución de scripts
+Options -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar
+RemoveType application/x-httpd-php application/x-httpd-php5
+
+# Desactivar listado de directorio
+Options -Indexes
