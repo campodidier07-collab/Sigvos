@@ -60,10 +60,9 @@ class Lote {
                     id_tipo_preferido = :id_tipo_preferido,
                     es_alternativo = :es_alternativo,
                     estado = :estado,
-                    actualizado_en = NOW()
-                WHERE id_lote = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([
+                    actualizado_en = NOW()";
+        
+        $params = [
             ':identificador'    => strtoupper(trim($datos['identificador'])),
             ':nombre'           => trim($datos['nombre']),
             ':ubicacion'        => trim($datos['ubicacion']),
@@ -72,7 +71,16 @@ class Lote {
             ':es_alternativo'   => $datos['es_alternativo'] ? 1 : 0,
             ':estado'           => $datos['estado'],
             ':id'               => $id,
-        ]);
+        ];
+
+        if (!empty($datos['fotografia'])) {
+            $sql .= ", fotografia = :fotografia";
+            $params[':fotografia'] = $datos['fotografia'];
+        }
+
+        $sql .= " WHERE id_lote = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
     }
 
     public function eliminar($id) {

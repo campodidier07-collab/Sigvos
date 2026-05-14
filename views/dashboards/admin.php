@@ -384,7 +384,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr class="hover:bg-[#f9fefb] transition">
                             <td class="px-5 py-3">
                                 <?php if (!empty($c['fotografia'])): ?>
-                                <img src="../../<?= htmlspecialchars($c['fotografia']) ?>" alt="Cultivo" class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition" onclick="abrirVisorImagen('../../<?= htmlspecialchars($c['fotografia']) ?>', 'Cultivo: <?= htmlspecialchars($c['codigo']) ?>', 'Lote: <?= htmlspecialchars($c['lote_id']) ?>')">
+                                <?php $fotoUrl = '/Gsigvos/public/storage/fotos/' . basename($c['fotografia']); ?>
+                                <img src="<?= htmlspecialchars($fotoUrl) ?>" alt="Cultivo"
+                                    class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition"
+                                    onclick="abrirVisorImagen('<?= htmlspecialchars($fotoUrl) ?>', 'Cultivo: <?= htmlspecialchars($c['codigo']) ?>', 'Lote: <?= htmlspecialchars($c['lote_id']) ?>')"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                <div style="display:none" class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-seedling text-sm"></i></div>
                                 <?php else: ?>
                                 <div class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-seedling text-sm"></i></div>
                                 <?php endif; ?>
@@ -398,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td class="px-5 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-semibold <?= $cls ?>"><?= ucfirst($c['estado']) ?></span></td>
                             <td class="px-5 py-3">
                                 <div class="flex gap-2">
-                                    <button onclick='abrirEditarCultivo(<?= json_encode($c) ?>)'
+                                    <button onclick='abrirEditarCultivo(<?= htmlspecialchars(json_encode($c)) ?>)'
                                         class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg font-semibold transition">
                                         <i class="fas fa-pen mr-1"></i>Editar
                                     </button>
@@ -521,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form action="../../controllers/CultivoController.php" method="POST" class="space-y-5">
+                <form action="../../controllers/CultivoController.php" method="POST" class="space-y-5" enctype="multipart/form-data">
                     <input type="hidden" name="accion" value="editar_cultivo">
                     <input type="hidden" name="id_cultivo" id="ec_id_cultivo">
 
@@ -576,6 +581,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Observaciones</label>
                         <textarea name="observaciones" id="ec_observaciones" rows="3"
                             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Cambiar Imagen (Opcional)</label>
+                        <input type="file" name="fotografia" accept="image/jpeg, image/png, image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
                     </div>
 
                     <div class="flex gap-3 pt-2">
@@ -642,7 +652,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr class="hover:bg-[#f9fefb] transition">
                             <td class="px-5 py-3">
                                 <?php if (!empty($l['fotografia'])): ?>
-                                <img src="../../<?= htmlspecialchars($l['fotografia']) ?>" alt="Lote" class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition" onclick="abrirVisorImagen('../../<?= htmlspecialchars($l['fotografia']) ?>', 'Lote: <?= htmlspecialchars($l['nombre']) ?>', 'ID: <?= htmlspecialchars($l['identificador']) ?> - <?= htmlspecialchars($l['ubicacion']) ?>')">
+                                <?php $fotoUrlLote = '/Gsigvos/public/storage/fotos/' . basename($l['fotografia']); ?>
+                                <img src="<?= htmlspecialchars($fotoUrlLote) ?>" alt="Lote"
+                                    class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition"
+                                    onclick="abrirVisorImagen('<?= htmlspecialchars($fotoUrlLote) ?>', 'Lote: <?= htmlspecialchars($l['nombre']) ?>', 'ID: <?= htmlspecialchars($l['identificador']) ?> - <?= htmlspecialchars($l['ubicacion']) ?>')"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                <div style="display:none" class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-map text-sm"></i></div>
                                 <?php else: ?>
                                 <div class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-map text-sm"></i></div>
                                 <?php endif; ?>
@@ -661,7 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </td>
                             <td class="px-5 py-3">
                                 <div class="flex gap-2">
-                                    <button onclick='abrirEditarLote(<?= json_encode($l) ?>)'
+                                    <button onclick='abrirEditarLote(<?= htmlspecialchars(json_encode($l)) ?>)'
                                         class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg font-semibold transition">
                                         <i class="fas fa-pen mr-1"></i>Editar
                                     </button>
@@ -763,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form action="../../controllers/LoteController.php" method="POST" class="space-y-4">
+                <form action="../../controllers/LoteController.php" method="POST" class="space-y-4" enctype="multipart/form-data">
                     <input type="hidden" name="accion" value="editar_lote">
                     <input type="hidden" name="id_lote" id="edit_id_lote">
 
@@ -815,6 +830,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             </label>
                         </div>
                     </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Cambiar Imagen (Opcional)</label>
+                        <input type="file" name="fotografia" accept="image/jpeg, image/png, image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                    </div>
+
                     <div class="flex gap-3 pt-2">
                         <button type="button" onclick="document.getElementById('modal-editar-lote').classList.add('hidden'); document.getElementById('modal-editar-lote').style.display='none'"
                             class="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-semibold hover:bg-gray-50 transition">

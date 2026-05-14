@@ -92,24 +92,31 @@ class Cultivo {
 
     /** Edita variedad, estado, fecha siembra, cosecha y observaciones */
     public function editar($id, $datos) {
-        $stmt = $this->conn->prepare(
-            "UPDATE cultivos SET
-                id_variedad             = :id_variedad,
-                estado                  = :estado,
-                fecha_siembra           = :fecha_siembra,
-                fecha_cosecha_estimada  = :fecha_cosecha,
-                observaciones           = :observaciones,
-                actualizado_en          = NOW()
-             WHERE id_cultivo = :id"
-        );
-        $stmt->execute([
+        $sql = "UPDATE cultivos SET
+                    id_variedad             = :id_variedad,
+                    estado                  = :estado,
+                    fecha_siembra           = :fecha_siembra,
+                    fecha_cosecha_estimada  = :fecha_cosecha,
+                    observaciones           = :observaciones,
+                    actualizado_en          = NOW()";
+        
+        $params = [
             ':id_variedad'  => $datos['id_variedad'],
             ':estado'       => $datos['estado'],
             ':fecha_siembra'=> $datos['fecha_siembra'],
             ':fecha_cosecha'=> $datos['fecha_cosecha_estimada'],
             ':observaciones'=> $datos['observaciones'],
             ':id'           => $id,
-        ]);
+        ];
+
+        if (!empty($datos['fotografia'])) {
+            $sql .= ", fotografia = :fotografia";
+            $params[':fotografia'] = $datos['fotografia'];
+        }
+
+        $sql .= " WHERE id_cultivo = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
     }
 
     /** Elimina el cultivo (soft) y libera el lote */

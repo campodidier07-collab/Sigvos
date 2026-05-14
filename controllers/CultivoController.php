@@ -132,6 +132,16 @@ function editarCultivo($cultivo, $db, $notif = null) {
     $fecha_siembra = trim($_POST['fecha_siembra'] ?? '');
     $observaciones = trim($_POST['observaciones'] ?? '');
 
+    $fotografia = null;
+    if (!empty($_FILES['fotografia']['name'])) {
+        $uploadDir = dirname(__DIR__) . '/public/storage/fotos/';
+        $fotografia = subirArchivoAux($_FILES['fotografia'], $uploadDir);
+        if (!$fotografia) {
+            $_SESSION['toast'] = ['text' => 'Error en imagen: Solo JPG/PNG/WEBP hasta 5MB.', 'type' => 'error'];
+            header('Location: ../views/dashboards/admin.php#cultivos'); exit;
+        }
+    }
+
     $estados_validos = ['sembrado','desarrollo','maduro','cosechado'];
     if (!$id || !$id_variedad || empty($fecha_siembra) || !in_array($estado, $estados_validos)) {
         $_SESSION['toast'] = ['text' => 'Datos inválidos para editar el cultivo.', 'type' => 'error'];
@@ -161,6 +171,7 @@ function editarCultivo($cultivo, $db, $notif = null) {
         'fecha_siembra'         => $fecha_siembra,
         'fecha_cosecha_estimada'=> $fecha_cosecha,
         'observaciones'         => $observaciones,
+        'fotografia'            => $fotografia
     ]);
 
     // Notificar a trabajadores del lote si el estado cambió a maduro
@@ -211,23 +222,21 @@ function eliminarCultivo($cultivo, $db = null, $notif = null) {
     exit;
 }
 
-if (!function_exists('subirArchivoAux')) {
-    function subirArchivoAux(array $file, string $dir): string|false
-    {
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $extValidas = ['jpg', 'jpeg', 'png', 'webp'];
-        $tamanoMax  = 5 * 1024 * 1024;
+function subirArchivoAux(array $file, string $dir): string|false
+{
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $extValidas = ['jpg', 'jpeg', 'png', 'webp'];
+    $tamanoMax  = 5 * 1024 * 1024;
 
-        if (!in_array($ext, $extValidas) || $file['size'] > $tamanoMax) {
-            return false;
-        }
-
-        $nombre = 'foto_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-        if (!move_uploaded_file($file['tmp_name'], $dir . $nombre)) {
-            return false;
-        }
-
-        return 'public/storage/fotos/' . $nombre;
+    if (!in_array($ext, $extValidas) || $file['size'] > $tamanoMax) {
+        return false;
     }
+
+    $nombre = 'foto_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+    if (!move_uploaded_file($file['tmp_name'], $dir . $nombre)) {
+        return false;
+    }
+
+    return $nombre;
 }
 ?>
