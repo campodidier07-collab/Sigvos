@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table class="w-full text-sm">
                     <thead class="bg-[#f0fdf4]">
                         <tr>
-                            <?php foreach (['Código','Variedad','Tipo','Lote','Siembra','Cosecha estimada','Estado','Acciones'] as $h): ?>
+                            <?php foreach (['Img','Código','Variedad','Tipo','Lote','Siembra','Cosecha estimada','Estado','Acciones'] as $h): ?>
                             <th class="text-left px-5 py-3 text-xs font-semibold text-[#6b9e8a] uppercase tracking-wider border-b border-[#d8eee4]"><?= $h ?></th>
                             <?php endforeach; ?>
                         </tr>
@@ -382,6 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             $cls = $badgeCultivo[$c['estado']] ?? 'bg-slate-100 text-slate-600';
                         ?>
                         <tr class="hover:bg-[#f9fefb] transition">
+                            <td class="px-5 py-3">
+                                <?php if (!empty($c['fotografia'])): ?>
+                                <img src="../../<?= htmlspecialchars($c['fotografia']) ?>" alt="Cultivo" class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition" onclick="abrirVisorImagen('../../<?= htmlspecialchars($c['fotografia']) ?>', 'Cultivo: <?= htmlspecialchars($c['codigo']) ?>', 'Lote: <?= htmlspecialchars($c['lote_id']) ?>')">
+                                <?php else: ?>
+                                <div class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-seedling text-sm"></i></div>
+                                <?php endif; ?>
+                            </td>
                             <td class="px-5 py-3 font-bold text-[#065f46]"><?= htmlspecialchars($c['codigo']) ?></td>
                             <td class="px-5 py-3 text-gray-700"><?= htmlspecialchars($c['variedad_nombre']) ?></td>
                             <td class="px-5 py-3 text-gray-500"><?= htmlspecialchars($c['tipo_nombre']) ?></td>
@@ -419,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form action="../../controllers/CultivoController.php" method="POST" class="space-y-5">
+                <form action="../../controllers/CultivoController.php" method="POST" class="space-y-5" enctype="multipart/form-data">
                     <input type="hidden" name="accion" value="crear_cultivo">
 
                     <div class="grid grid-cols-2 gap-5">
@@ -484,6 +491,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Observaciones</label>
                         <textarea name="observaciones" rows="3" placeholder="Notas adicionales sobre el cultivo..."
                             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Imagen del Cultivo (Opcional)</label>
+                        <input type="file" name="fotografia" accept="image/jpeg, image/png, image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
                     </div>
 
                     <div class="flex gap-3 pt-2">
@@ -620,7 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table class="w-full text-sm">
                     <thead class="bg-[#f0fdf4]">
                         <tr>
-                            <?php foreach (['ID','Nombre','Ubicación','Área (ha)','Tipo','Estado','Acciones'] as $h): ?>
+                            <?php foreach (['Img','ID','Nombre','Ubicación','Área (ha)','Tipo','Estado','Acciones'] as $h): ?>
                             <th class="text-left px-5 py-3 text-xs font-semibold text-[#6b9e8a] uppercase tracking-wider border-b border-[#d8eee4]"><?= $h ?></th>
                             <?php endforeach; ?>
                         </tr>
@@ -628,6 +640,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tbody class="divide-y divide-[#f0fdf4]">
                         <?php foreach ($lotes as $l): ?>
                         <tr class="hover:bg-[#f9fefb] transition">
+                            <td class="px-5 py-3">
+                                <?php if (!empty($l['fotografia'])): ?>
+                                <img src="../../<?= htmlspecialchars($l['fotografia']) ?>" alt="Lote" class="w-10 h-10 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-80 transition" onclick="abrirVisorImagen('../../<?= htmlspecialchars($l['fotografia']) ?>', 'Lote: <?= htmlspecialchars($l['nombre']) ?>', 'ID: <?= htmlspecialchars($l['identificador']) ?> - <?= htmlspecialchars($l['ubicacion']) ?>')">
+                                <?php else: ?>
+                                <div class="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400"><i class="fas fa-map text-sm"></i></div>
+                                <?php endif; ?>
+                            </td>
                             <td class="px-5 py-3 font-bold text-[#065f46]"><?= htmlspecialchars($l['identificador']) ?></td>
                             <td class="px-5 py-3 text-gray-700"><?= htmlspecialchars($l['nombre']) ?></td>
                             <td class="px-5 py-3 text-gray-500"><?= htmlspecialchars($l['ubicacion']) ?></td>
@@ -670,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form action="../../controllers/LoteController.php" method="POST" class="space-y-4">
+                <form action="../../controllers/LoteController.php" method="POST" class="space-y-4" enctype="multipart/form-data">
                     <input type="hidden" name="accion" value="crear_lote">
 
                     <div class="grid grid-cols-2 gap-4">
@@ -714,6 +733,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 Lote alternativo
                             </label>
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Imagen del Lote (Opcional)</label>
+                        <input type="file" name="fotografia" accept="image/jpeg, image/png, image/webp" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-emerald-400 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
                     </div>
 
                     <div class="flex gap-3 pt-2">
@@ -2855,6 +2879,14 @@ function closeModal()   { /* deshabilitado */ }
 function submitForm(e)  { e.preventDefault(); }
 function exportarReporte() { /* deshabilitado */ }
 
+function abrirVisorImagen(src, titulo, desc) {
+    document.getElementById('visor-img').src = src;
+    document.getElementById('visor-titulo').textContent = titulo;
+    document.getElementById('visor-desc').textContent = desc;
+    document.getElementById('modal-visor-imagen').classList.remove('hidden');
+    document.getElementById('modal-visor-imagen').style.display = 'flex';
+}
+
 // Cerrar todos los modales al cargar o al volver desde bfcache (pageshow cubre bfcache)
 function cerrarTodosLosModales() {
     document.querySelectorAll('[id^="modal-"]').forEach(m => {
@@ -2911,6 +2943,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<!-- Visor de Imágenes -->
+<div id="modal-visor-imagen" style="display:none" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div class="relative max-w-4xl w-full flex flex-col items-center">
+        <button onclick="document.getElementById('modal-visor-imagen').classList.add('hidden'); document.getElementById('modal-visor-imagen').style.display='none'" class="absolute -top-12 right-0 text-white hover:text-gray-300 text-3xl">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="visor-img" src="" alt="Vista ampliada" class="max-h-[80vh] object-contain rounded-xl shadow-2xl mb-4">
+        <div class="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-2xl text-center max-w-lg">
+            <h4 id="visor-titulo" class="font-bold text-lg"></h4>
+            <p id="visor-desc" class="text-sm text-gray-300"></p>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
 

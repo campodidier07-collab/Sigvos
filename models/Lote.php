@@ -28,9 +28,9 @@ class Lote {
 
     public function crear($datos) {
         $sql = "INSERT INTO {$this->tabla}
-                    (identificador, nombre, ubicacion, area_ha, id_tipo_preferido, es_alternativo, estado, activo, creado_en, actualizado_en)
+                    (identificador, nombre, ubicacion, area_ha, id_tipo_preferido, es_alternativo, estado, activo, fotografia, creado_en, actualizado_en)
                 VALUES
-                    (:identificador, :nombre, :ubicacion, :area_ha, :id_tipo_preferido, :es_alternativo, 'disponible', 1, NOW(), NOW())";
+                    (:identificador, :nombre, :ubicacion, :area_ha, :id_tipo_preferido, :es_alternativo, 'disponible', 1, :fotografia, NOW(), NOW())";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
             ':identificador'    => strtoupper(trim($datos['identificador'])),
@@ -39,6 +39,7 @@ class Lote {
             ':area_ha'          => $datos['area_ha'],
             ':id_tipo_preferido'=> $datos['id_tipo_preferido'] ?: null,
             ':es_alternativo'   => $datos['es_alternativo'] ? 1 : 0,
+            ':fotografia'       => $datos['fotografia'] ?? null,
         ]);
         return $this->conn->lastInsertId();
     }

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $rootPath = dirname(__DIR__);
 require_once $rootPath . '/config/session.php';
 
@@ -41,6 +41,19 @@ function crearLote($lote) {
     $area_ha        = trim($_POST['area_ha'] ?? '');
     $id_tipo        = $_POST['id_tipo_preferido'] ?? null;
     $es_alternativo = isset($_POST['es_alternativo']) ? 1 : 0;
+    
+    $fotografia = null;
+    if (!empty($_FILES['fotografia']['name'])) {
+        $uploadDir = dirname(__DIR__) . '/public/storage/fotos/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        $fotografia = subirArchivoAux($_FILES['fotografia'], $uploadDir);
+        if (!$fotografia) {
+            $_SESSION['toast'] = ['text' => 'Error en imagen: Solo JPG/PNG/WEBP hasta 5MB.', 'type' => 'error'];
+            header('Location: ../views/dashboards/admin.php#lotes'); exit;
+        }
+    }
 
     if (empty($identificador) || empty($nombre) || empty($ubicacion) || empty($area_ha)) {
         $_SESSION['toast'] = ['text' => 'Todos los campos obligatorios deben completarse.', 'type' => 'error'];
@@ -66,6 +79,7 @@ function crearLote($lote) {
         'area_ha'           => (float)$area_ha,
         'id_tipo_preferido' => $id_tipo ?: null,
         'es_alternativo'    => $es_alternativo,
+        'fotografia'        => $fotografia,
     ]);
 
     $_SESSION['toast'] = ['text' => "Lote '{$nombre}' registrado exitosamente.", 'type' => 'success'];
@@ -118,4 +132,24 @@ function eliminarLote($lote) {
     $lote->eliminar($id);
     $_SESSION['toast'] = ['text' => 'Lote eliminado correctamente.', 'type' => 'success'];
     header('Location: ../views/dashboards/admin.php#lotes'); exit;
+}
+
+if (!function_exists('subirArchivoAux')) {
+    function subirArchivoAux(array $file, string $dir): string|false
+    {
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $extValidas = ['jpg', 'jpeg', 'png', 'webp'];
+        $tamanoMax  = 5 * 1024 * 1024;
+
+        if (!in_array($ext, $extValidas) || $file['size'] > $tamanoMax) {
+            return false;
+        }
+
+        $nombre = 'foto_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+        if (!move_uploaded_file($file['tmp_name'], $dir . $nombre)) {
+            return false;
+        }
+
+        return 'public/storage/fotos/' . $nombre;
+    }
 }

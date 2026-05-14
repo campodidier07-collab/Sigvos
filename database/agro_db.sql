@@ -60,6 +60,7 @@ CREATE TABLE tipos_cultivo (
     codigo VARCHAR(15) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL UNIQUE,
     descripcion VARCHAR(200),
+    fotografia VARCHAR(255),
     activo BOOLEAN NOT NULL DEFAULT 1,
     creado_en DATETIME NOT NULL
 );
@@ -95,6 +96,7 @@ CREATE TABLE lotes (
     ubicacion VARCHAR(200) NOT NULL,
     area_ha DECIMAL(6,2) NOT NULL,
     id_tipo_preferido TINYINT,
+    fotografia VARCHAR(255),
     es_alternativo BOOLEAN NOT NULL DEFAULT 0,
     estado VARCHAR(20) NOT NULL DEFAULT 'disponible',
     activo BOOLEAN NOT NULL DEFAULT 1,

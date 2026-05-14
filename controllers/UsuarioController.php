@@ -13,7 +13,7 @@ $usuario  = new Usuario($db);
 
 $accion = $_POST['accion'] ?? $_GET['accion'] ?? '';
 
-// Verificar cookie "remember me" si no hay sesión activa
+ // Verificar cookie "remember me" si no hay sesión activa
 if (!isset($_SESSION['id_usuario'])) {
     remember_me_check($db);
 }

@@ -64,7 +64,7 @@ class Cultivo {
                  VALUES
                     (:id_lote, :id_variedad, :registrado_por, :codigo, 'sembrado',
                      :fecha_siembra, :fecha_cosecha, :observaciones,
-                     NULL, :id_lote, NOW(), NOW())"
+                     :fotografia, :id_lote, NOW(), NOW())"
             );
             $stmt->execute([
                 ':id_lote'       => $datos['id_lote'],
@@ -74,6 +74,7 @@ class Cultivo {
                 ':fecha_siembra' => $datos['fecha_siembra'],
                 ':fecha_cosecha' => $datos['fecha_cosecha_estimada'],
                 ':observaciones' => $datos['observaciones'] ?? '',
+                ':fotografia'    => $datos['fotografia'] ?? null,
             ]);
             $id = $this->conn->lastInsertId();
 
@@ -145,7 +146,7 @@ class Cultivo {
     /** Lista todos los cultivos activos con info de lote y variedad */
     public function obtenerTodos() {
         return $this->conn
-            ->query("SELECT c.id_cultivo, c.codigo, c.estado, c.fecha_siembra,
+            ->query("SELECT c.id_cultivo, c.codigo, c.estado, c.fecha_siembra, c.fotografia,
                             c.fecha_cosecha_estimada, c.observaciones,
                             l.id_lote, l.nombre AS lote_nombre, l.identificador AS lote_id,
                             v.nombre AS variedad_nombre, v.id_variedad,
