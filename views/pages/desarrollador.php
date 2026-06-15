@@ -73,7 +73,7 @@
             <div class="glass-card rounded-3xl p-14 flex flex-col items-center w-full max-w-lg transition-transform hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(33,84,61,0.1)]">
                 
                 <div class="w-48 h-48 rounded-full border-4 border-agro-400 p-1 overflow-hidden mb-6 shadow-xl bg-white relative group">
-                    <img src="../../img/fotodevjpeg.jpeg" alt="Didier Arley Puentes Campo" class="w-full h-full object-cover object-top rounded-full transition duration-500 group-hover:scale-110">
+                    <img src="../../img/dev.jpeg" alt="Didier Arley Puentes Campo" class="w-full h-full object-cover object-top rounded-full transition duration-500 group-hover:scale-110">
                 </div>
                 
                 <span class="bg-agro-50 text-agro-600 border border-agro-200 text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-5 shadow-sm">

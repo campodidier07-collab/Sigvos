@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $rootPath = dirname(__DIR__);
 if (!empty($_GET['PHPSESSID']) && session_status() === PHP_SESSION_NONE) {
     session_id(preg_replace('/[^a-zA-Z0-9,-]/', '', $_GET['PHPSESSID']));
@@ -19,7 +19,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 // Si la sesión se restauró y están en login/registro, redirigir al dashboard
-if (isset($_SESSION['id_usuario']) && in_array($accion, ['login', 'registro'])) {
+if (isset($_SESSION['id_usuario']) && $accion === 'login') {
     if ((int)$_SESSION['id_rol'] === 1) {
         header('Location: ../views/dashboards/admin.php');
     } else {
